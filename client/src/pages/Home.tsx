@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import './Home.css'; // We'll move inline styles into CSS
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import './Home.css';
 
 const services = [
   { name: 'House Cleaning', icon: '🏠', description: 'Professional home cleaning services' },
@@ -12,27 +13,47 @@ const services = [
 ];
 
 const Home = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleHireClick = () => {
+    if (user) {
+      navigate('/services');
+    } else {
+      navigate('/login', { state: { from: '/services' } });
+    }
+  };
+
+  const handleServiceClick = (serviceName: string) => {
+    if (user) {
+      navigate(`/services/${encodeURIComponent(serviceName)}`);
+    } else {
+      navigate('/login', { state: { from: `/services/${encodeURIComponent(serviceName)}` } });
+    }
+  };
+
   return (
     <div className="home-container">
       <div className="hero-section">
         <h1>Find and Book Local Freelancers</h1>
         <p>Browse, book, and pay trusted service providers. Freelancers can upload before/after photos for dispute resolution.</p>
-        <Link to="/booking" className="cta-button">Book a Service Now</Link>
+        <button onClick={handleHireClick} className="cta-button">Book a Service Now</button>
       </div>
 
       <div className="services-section">
         <h2>Popular Services</h2>
         <div className="services-grid">
           {services.map(service => (
-            <Link
-              to={`/services/${encodeURIComponent(service.name)}`}
+            <div
               className="service-card"
               key={service.name}
+              onClick={() => handleServiceClick(service.name)}
+              style={{ cursor: 'pointer' }}
             >
               <div className="service-icon">{service.icon}</div>
               <h3>{service.name}</h3>
               <p>{service.description}</p>
-            </Link>
+            </div>
           ))}
         </div>
       </div>

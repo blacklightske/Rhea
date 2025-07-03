@@ -1,80 +1,114 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import './Login.css';
 
-const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+interface LoginData {
+  email: string;
+  password: string;
+}
+
+const Login: React.FC = () => {
+  const [loginData, setLoginData] = useState<LoginData>({
+    email: '',
+    password: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { login, user } = useAuth();
+
+  // Get the intended destination from location state
+  const from = location.state?.from?.pathname || '/dashboard';
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLoginData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    // Simulate login process
-    setTimeout(() => {
-      setIsLoading(false);
-      alert('Login functionality will be implemented with Clerk authentication');
-    }, 1000);
+    setLoading(true);
+    setError('');
+
+    try {
+      const success = await login(loginData.email, loginData.password);
+      
+      if (success) {
+        // Redirect to intended destination or appropriate dashboard
+        if (from === '/dashboard') {
+          // Determine dashboard based on user type
+          const userData = JSON.parse(localStorage.getItem('user') || '{}');
+          if (userData.userType === 'freelancer') {
+            navigate('/freelancer-dashboard');
+          } else {
+            navigate('/user-dashboard');
+          }
+        } else {
+          navigate(from);
+        }
+      } else {
+        setError('Invalid email or password');
+      }
+    } catch (error) {
+      setError('Network error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="container">
-      <div className="row" style={{ justifyContent: 'center', minHeight: '80vh', alignItems: 'center' }}>
-        <div className="col-md-6">
-          <div className="card">
-            <div className="text-center mb-4">
-              <h2>Welcome Back</h2>
-              <p>Sign in to your account to continue</p>
-            </div>
-            
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="email" className="form-label">Email Address</label>
-                <input 
-                  type="email" 
-                  id="email" 
-                  className="form-control"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="password" className="form-label">Password</label>
-                <input 
-                  type="password" 
-                  id="password" 
-                  className="form-control"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  required
-                />
-              </div>
-              
-              <button 
-                type="submit" 
-                className="btn btn-primary" 
-                style={{ width: '100%' }}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <>
-                    <span className="loading"></span>
-                    <span style={{ marginLeft: '0.5rem' }}>Signing in...</span>
-                  </>
-                ) : (
-                  'Sign In'
-                )}
-              </button>
-            </form>
-            
-            <div className="text-center mt-4">
-              <p>Don't have an account? <Link to="/register" style={{ color: '#007bff', textDecoration: 'none' }}>Sign up here</Link></p>
-              <p><Link to="/forgot-password" style={{ color: '#6c757d', textDecoration: 'none' }}>Forgot your password?</Link></p>
-            </div>
+    <div className="login-container">
+      <div className="login-card">
+        <div className="login-header">
+          <h2>Welcome Back</h2>
+          <p>Sign in to your account</p>
+        </div>
+        
+        <form onSubmit={handleSubmit} className="login-form">
+          {error && <div className="error-message">{error}</div>}
+          
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={loginData.email}
+              onChange={handleInputChange}
+              required
+              placeholder="Enter your email"
+            />
           </div>
+          
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={loginData.password}
+              onChange={handleInputChange}
+              required
+              placeholder="Enter your password"
+            />
+          </div>
+          
+          <button type="submit" disabled={loading} className="login-btn">
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
+          
+          <div className="signup-link">
+            <p>Don't have an account? <Link to="/signup">Sign up here</Link></p>
+          </div>
+        </form>
+        
+        <div className="login-footer">
+          <a href="#" className="forgot-password">Forgot your password?</a>
         </div>
       </div>
     </div>

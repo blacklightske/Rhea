@@ -37,7 +37,7 @@ const FreelancerCard: React.FC<FreelancerCardProps> = ({ freelancer, onHire, onD
         <p className="fee">Fee: KES {fee}</p>
         <div className="rating">
           <span>{'⭐'.repeat(Math.floor(rating))}</span>
-          <span className="rating-number">({rating.toFixed(1)})</span>
+          <span className="rating-number">({(Number(rating) || 0).toFixed(1)})</span>
         </div>
         <div className="reviews">
           <h4>Client Reviews:</h4>
