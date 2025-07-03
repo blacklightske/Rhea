@@ -7,32 +7,6 @@ const ServiceFreelancers = () => {
   const navigate = useNavigate();
   const [uploads, setUploads] = useState<Uploads>({});
 
-  const freelancers = [
-    {
-      id: 1,
-      name: 'John Doe',
-      profilePhoto: 'https://randomuser.me/api/portraits/men/31.jpg',
-      rating: 4.5,
-      expertise: serviceName,
-      fee: 2000,
-      reviews: [
-        { id: 1, text: 'Great work!', stars: 5 },
-        { id: 2, text: 'Very professional', stars: 4 }
-      ]
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      profilePhoto: 'https://randomuser.me/api/portraits/women/45.jpg',
-      rating: 4.8,
-      expertise: serviceName,
-      fee: 2500,
-      reviews: [
-        { id: 1, text: 'Super friendly and efficient', stars: 5 }
-      ]
-    }
-  ];
-
   interface Review {
     id: number;
     text: string;
@@ -58,14 +32,48 @@ const ServiceFreelancers = () => {
 
   type UploadType = 'before' | 'after';
 
+  const freelancers: Freelancer[] = [
+    {
+      id: 1,
+      name: 'John Doe',
+      profilePhoto: 'https://randomuser.me/api/portraits/men/31.jpg',
+      rating: 4.5,
+      expertise: serviceName,
+      fee: 2000,
+      reviews: [
+        { id: 1, text: 'Great work!', stars: 5 },
+        { id: 2, text: 'Very professional', stars: 4 }
+      ]
+    },
+    {
+      id: 2,
+      name: 'Jane Smith',
+      profilePhoto: 'https://randomuser.me/api/portraits/women/45.jpg',
+      rating: 4.8,
+      expertise: serviceName,
+      fee: 2500,
+      reviews: [
+        { id: 1, text: 'Super friendly and efficient', stars: 5 }
+      ]
+    }
+  ];
+
   const handleUpload = (id: number, type: UploadType, file: File) => {
-    setUploads((prev: Uploads) => ({
+    setUploads(prev => ({
       ...prev,
       [id]: {
         ...prev[id],
         [type]: URL.createObjectURL(file)
       }
     }));
+  };
+
+  const handleHire = (freelancer: Freelancer) => {
+    // Option 1: Navigate with query params
+    navigate(`/booking?freelancerId=${freelancer.id}&name=${encodeURIComponent(freelancer.name)}&fee=${freelancer.fee}`);
+
+    // Option 2 (better): navigate with state
+    // navigate('/booking', { state: { freelancer } });
   };
 
   return (
@@ -82,9 +90,7 @@ const ServiceFreelancers = () => {
             <h3>{f.name}</h3>
             <p>Expertise: {f.expertise}</p>
             <p>Fee: KES {f.fee}</p>
-            <p>
-              Rating: {'⭐'.repeat(Math.floor(f.rating))} ({f.rating})
-            </p>
+            <p>Rating: {'⭐'.repeat(Math.floor(f.rating))} ({f.rating})</p>
 
             <div className="review-section">
               <strong>Client Reviews:</strong>
@@ -125,16 +131,12 @@ const ServiceFreelancers = () => {
             </div>
 
             <div className="image-preview">
-              {uploads[f.id]?.before && (
-                <img src={uploads[f.id].before} alt="Before" />
-              )}
-              {uploads[f.id]?.after && (
-                <img src={uploads[f.id].after} alt="After" />
-              )}
+              {uploads[f.id]?.before && <img src={uploads[f.id].before} alt="Before" />}
+              {uploads[f.id]?.after && <img src={uploads[f.id].after} alt="After" />}
             </div>
 
             <div className="freelancer-buttons">
-              <button className="hire-btn">Hire</button>
+              <button className="hire-btn" onClick={() => handleHire(f)}>Hire</button>
               <button className="cancel-btn">Cancel</button>
             </div>
           </div>
