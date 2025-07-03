@@ -7,6 +7,9 @@ import usersRouter from './routes/users';
 
 const app: Application = express();
 
+// Add this to debug
+console.log('Setting up Express app with TypeScript routes');
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

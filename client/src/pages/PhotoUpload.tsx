@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
 const PhotoUpload = () => {
-  const [beforePhoto, setBeforePhoto] = useState(null);
-  const [afterPhoto, setAfterPhoto] = useState(null);
+  const [beforePhoto, setBeforePhoto] = useState<File | null>(null);
+  const [afterPhoto, setAfterPhoto] = useState<File | null>(null);
 
-  const handleBeforeChange = (e: React.ChangeEventHandler<HTMLInputElement>) => {
+  const handleBeforeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setBeforePhoto(e.target.files[0]);
     }

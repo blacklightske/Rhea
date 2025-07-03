@@ -1,5 +1,4 @@
 import React from 'react';
-import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -7,31 +6,28 @@ import FreelancerDashboard from './pages/FreelancerDashboard';
 import Booking from './pages/Booking';
 import PhotoUpload from './pages/PhotoUpload';
 
-const clerkFrontendApi = 'YOUR_CLERK_FRONTEND_API'; // Replace with your Clerk frontend API
-
 function App() {
   return (
-    <ClerkProvider frontendApi={clerkFrontendApi}>
-      <SignedIn>
-        <Router>
-          <nav>
-            <Link to="/">Home</Link> |{' '}
-            <Link to="/dashboard">Dashboard</Link> |{' '}
-            <Link to="/booking">Booking</Link> |{' '}
-            <Link to="/upload">Photo Upload</Link>
-          </nav>
+    <Router>
+      <div className="app">
+        <nav style={{ padding: '1rem', backgroundColor: '#f0f0f0', marginBottom: '2rem' }}>
+          <Link to="/" style={{ marginRight: '1rem' }}>Home</Link>
+          <Link to="/dashboard" style={{ marginRight: '1rem' }}>Dashboard</Link>
+          <Link to="/booking" style={{ marginRight: '1rem' }}>Booking</Link>
+          <Link to="/upload" style={{ marginRight: '1rem' }}>Photo Upload</Link>
+          <Link to="/login">Login</Link>
+        </nav>
+        <div style={{ padding: '1rem' }}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/dashboard" element={<FreelancerDashboard />} />
             <Route path="/booking" element={<Booking />} />
             <Route path="/upload" element={<PhotoUpload />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
-        </Router>
-      </SignedIn>
-      <SignedOut>
-        <Login />
-      </SignedOut>
-    </ClerkProvider>
+        </div>
+      </div>
+    </Router>
   );
 }
 
