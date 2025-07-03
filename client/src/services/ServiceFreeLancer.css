@@ -1,0 +1,130 @@
+.freelancers-container {
+  max-width: 960px;
+  margin: auto;
+  padding: 1rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.back-button {
+  background: #eee;
+  border: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.back-button:hover {
+  background: #ddd;
+}
+
+.freelancer-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.freelancer-photo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.freelancer-info {
+  flex: 1;
+}
+
+.review-section {
+  margin-top: 0.5rem;
+}
+
+.review-section ul {
+  padding-left: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.image-upload-section {
+  margin: 1rem 0;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.image-upload-section label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+}
+
+.image-preview {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.image-preview img {
+  width: 80px;
+  height: 80px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.freelancer-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.hire-btn,
+.cancel-btn {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hire-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.hire-btn:hover {
+  background-color: #218838;
+}
+
+.cancel-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background-color: #c82333;
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+  .freelancer-card {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .freelancer-photo {
+    margin-bottom: 1rem;
+  }
+
+  .freelancer-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hire-btn,
+  .cancel-btn {
+    width: 100%;
+  }
+}
