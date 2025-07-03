@@ -18,8 +18,11 @@ const PhotoUpload = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: Upload logic to backend
-    alert('Photos submitted!');
+    if (beforePhoto && afterPhoto) {
+      alert(`Photos submitted!\nBefore: ${beforePhoto.name}\nAfter: ${afterPhoto.name}`);
+    } else {
+      alert('Please select both before and after photos');
+    }
   };
 
   return (
